@@ -35,7 +35,6 @@ fun NewsHomeScreen() {
     val viewModel: NewsViewModel = koinViewModel()
     val newsState by viewModel.newsState.collectAsState()
 
-    viewModel.getNews("General")
 
     val categoryList =
         listOf(
@@ -98,7 +97,5 @@ fun NewsHomeScreen() {
                 }
             }
         }
-
-
     }
 }

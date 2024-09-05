@@ -11,6 +11,9 @@ import kotlinx.coroutines.launch
 
 class NewsViewModel(private val newsRepository: NewsRepository) : ViewModel() {
 
+    init {
+        getNews("General")
+    }
 
     private val _newsState = MutableStateFlow<List<Article>>(emptyList())
     val newsState = _newsState.asStateFlow()
