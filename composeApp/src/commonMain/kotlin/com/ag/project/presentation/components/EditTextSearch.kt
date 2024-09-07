@@ -21,12 +21,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.ag.project.presentation.screen.NewsViewModel
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
-fun EditTextSearch() {
+fun EditTextSearch(
+    viewModel: NewsViewModel = koinViewModel(),
+) {
 
-    var txtSearchState by remember {
+    var textFieldSearchState by remember {
         mutableStateOf("")
     }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -36,12 +42,9 @@ fun EditTextSearch() {
     ) {
 
         OutlinedTextField(
-            value = txtSearchState,
+            value = textFieldSearchState,
             onValueChange = { newValue ->
-                txtSearchState = newValue
-                if (txtSearchState.trim().isNotEmpty()) {
-//                    viewModel.getNewsByName(newValue)
-                }
+                textFieldSearchState = newValue
             },
             placeholder = { Text(text = "Search ....") },
 
@@ -49,7 +52,12 @@ fun EditTextSearch() {
                 imeAction = ImeAction.Search
             ),
             keyboardActions = KeyboardActions(
-                onSearch = {keyboardController?.hide()}
+                onSearch = {
+                    keyboardController?.hide()
+                    if (textFieldSearchState.trim().isNotEmpty()) {
+                        viewModel.getNewsBySearch(textFieldSearchState)
+                    }
+                }
             ),
             leadingIcon = {
                 Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search")

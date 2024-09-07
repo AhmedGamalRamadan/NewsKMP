@@ -35,7 +35,6 @@ import com.skydoves.landscapist.coil3.CoilImage
 @Composable
 fun NewsItem(
     article: Article,
-//    navHostController: NavHostController,
 ) {
 
     var isFavorite by remember {
@@ -62,23 +61,30 @@ fun NewsItem(
 
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            CoilImage(
-                imageModel = { article.urlToImage },
-                imageOptions = ImageOptions(
-                    contentScale = ContentScale.Crop,
-                ),
-                loading = {
-                    Box(
-                        modifier = Modifier.matchParentSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
 
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
+            article.urlToImage?.let { imageUrl ->
+                CoilImage(
+                    imageModel = { imageUrl },
+                    imageOptions = ImageOptions(
+                        contentScale = ContentScale.Crop,
+                    ),
+                    loading = {
+                        Box(
+                            modifier = Modifier.matchParentSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+
+                        }
+                    },
+                    failure = {
+                        Text("Image Not Supported")
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+            }
+
 
             article.source?.name?.let { sourceName ->
                 Text(

@@ -62,7 +62,7 @@ fun NewsHomeScreen() {
                     modifier = Modifier.padding(4.dp),
                     onClick = {
                         categorySelectedIndex = index
-                        viewModel.getNews(category)
+                        viewModel.getNewsByCategory(category)
                     },
                     shape = RoundedCornerShape(20.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -81,19 +81,19 @@ fun NewsHomeScreen() {
 
         Spacer(Modifier.height(8.dp))
 
-        if (newsState.isEmpty()){
+        if (newsState.isEmpty()) {
             LazyColumn {
-                items(6){
+                items(6) {
                     ShimmerListItem(true)
 
                 }
             }
-        }else{
+        } else {
             ShimmerListItem(false)
 
             LazyColumn {
-                items(newsState){article->
-                    NewsItem(article =article)
+                items(newsState) { article ->
+                    NewsItem(article = article)
                 }
             }
         }
