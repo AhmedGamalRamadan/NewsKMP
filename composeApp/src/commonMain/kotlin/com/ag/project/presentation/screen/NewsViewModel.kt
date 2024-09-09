@@ -19,13 +19,13 @@ class NewsViewModel(
     private val _newsState = MutableStateFlow<List<Article>>(emptyList())
     val newsState = _newsState.asStateFlow()
 
-
     fun getNewsByCategory(category: String) {
+
         viewModelScope.launch {
 
             try {
-                val response = newsRepository.getNewsByCategory(category)
-                _newsState.emit(response.articles)
+                val response = newsRepository.getNewsByCategory(category = category).articles
+                _newsState.emit(response)
 
             } catch (e: Exception) {
                 println("Error fetching news: ${e.message}")

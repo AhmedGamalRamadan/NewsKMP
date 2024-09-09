@@ -14,7 +14,8 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.ag.project.presentation.screen.NewsViewModel
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -32,7 +34,10 @@ fun EditTextSearch(
     viewModel: NewsViewModel = koinViewModel(),
 ) {
 
-    var textFieldSearchState by remember {
+    val scope = rememberCoroutineScope()
+
+
+    var textFieldSearchState by rememberSaveable{
         mutableStateOf("")
     }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -53,10 +58,12 @@ fun EditTextSearch(
             ),
             keyboardActions = KeyboardActions(
                 onSearch = {
-                    keyboardController?.hide()
                     if (textFieldSearchState.trim().isNotEmpty()) {
-                        viewModel.getNewsBySearch(textFieldSearchState)
+                        scope.launch {
+                            viewModel.getNewsBySearch(textFieldSearchState)
+                        }
                     }
+                    keyboardController?.hide()
                 }
             ),
             leadingIcon = {

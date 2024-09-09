@@ -31,7 +31,6 @@ class NewsRepositoryImpl(
             NewsResponse(emptyList(), e.message.toString(), 0)
         }
     }
-
     override suspend fun getNewsBySearch(q: String): NewsResponse {
 
         return try {

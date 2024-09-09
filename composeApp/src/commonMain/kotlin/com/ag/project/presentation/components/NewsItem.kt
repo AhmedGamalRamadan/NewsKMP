@@ -28,14 +28,21 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.ag.project.domain.model.Article
+import com.ag.project.utils.Screen
+import com.ag.project.utils.encodeUrl
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil3.CoilImage
-
 @Composable
 fun NewsItem(
     article: Article,
+    navHostController: NavHostController
 ) {
+
+    val image = article.urlToImage?.let {
+        encodeUrl(it)
+    }?: ""
 
     var isFavorite by remember {
         mutableStateOf(false)
@@ -56,7 +63,7 @@ fun NewsItem(
             .padding(15.dp)
             .background(Color.White)
             .clickable {
-
+                navHostController.navigate(Screen.Details.rout + "/${image}/${article.title}/${article.description}")
             }
 
     ) {
